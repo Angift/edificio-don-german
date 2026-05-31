@@ -687,7 +687,7 @@ const DEMO_DATA = [
 // ══════════════════════════════════════════════
 //  ESTADO
 // ══════════════════════════════════════════════
-let allData      = [];
+let allData      = DEMO_DATA;
 let filters      = { circulares:'', legal:'' };
 let yearFilters  = { circulares:'', legal:'' };
 let gastosYear   = '';
@@ -726,20 +726,7 @@ function goHome() {
 // ══════════════════════════════════════════════
 //  CARGA
 // ══════════════════════════════════════════════
-async function loadData() {
-  try {
-    const res  = await fetch(SHEET_URL);
-    const text = await res.text();
-    const json = JSON.parse(text.substring(47).slice(0,-2));
-    const cols = json.table.cols.map(c => c.label.toLowerCase().trim());
-    allData = json.table.rows.map(r => {
-      const obj = {};
-      cols.forEach((col,i) => { obj[col] = r.c[i]?.v || ''; });
-      return obj;
-    });
-  } catch(e) {
-    allData = DEMO_DATA;
-  }
+function loadData() {
   buildYearFilters();
   renderAll();
 }
