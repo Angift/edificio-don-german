@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://docs.google.com https://spreadsheets.google.com; img-src 'self' data: https:; frame-ancestors 'none';">
+<meta name="description" content="Portal de residentes de la Comunidad Edificio Don Germán. Circulares, gastos comunes, documentos legales y tablero de noticias.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Comunidad Edificio Don Germán — Portal de Residentes">
+<meta property="og:description" content="Circulares, gastos comunes, documentos legales y tablero de noticias para los residentes del Edificio Don Germán.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://angift.github.io/edificio-don-german/">
+<link rel="canonical" href="https://angift.github.io/edificio-don-german/">
 <title>Comunidad Edificio Don Germán</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -630,7 +639,8 @@
 
 <footer>
   Comunidad Edificio Don Germán · 
-  <a href="mailto:ed.dongerman@gmail.com?subject=Consulta%20Edificio%20Don%20Germán&body=Hola%20Andrea%2C%20me%20comunico%20por..." 
+  <a href="mailto:ed.dongerman@gmail.com?subject=Consulta%20Edificio%20Don%20Germán&body=Hola%20Andrea%2C%20me%20comunico%20por..."
+     rel="noopener noreferrer"
      style="color:var(--gold-light);text-decoration:none;font-weight:800;">
     ed.dongerman@gmail.com
   </a> 
@@ -638,6 +648,18 @@
 </footer>
 
 <script>
+// ══════════════════════════════════════════════
+//  SEGURIDAD — sanitización de datos
+// ══════════════════════════════════════════════
+function esc(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function safeUrl(url) {
+  if (!url || url === '#') return null;
+  const s = String(url).trim();
+  return (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('mailto:')) ? s : null;
+}
+
 // ══════════════════════════════════════════════
 //  CONFIGURACIÓN
 // ══════════════════════════════════════════════
@@ -771,25 +793,28 @@ function renderDocs(tipo, gridId, emptyId, countId) {
   );
   const count = document.getElementById(countId);
   count.textContent = `${items.length} documento${items.length !== 1 ? 's' : ''}`;
-  document.getElementById(gridId).innerHTML = items.map(d => `
+  document.getElementById(gridId).innerHTML = items.map(d => {
+    const u1 = safeUrl(d.url);
+    const u2 = safeUrl(d.url2);
+    return `
     <div class="doc-card">
       <div class="card-top">
         <span class="cat-pill ${catClass[d.tipo]}">${catLabel[d.tipo]}</span>
-        <span class="doc-date">${d.fecha}</span>
+        <span class="doc-date">${esc(d.fecha)}</span>
       </div>
-      <h3 class="doc-title">${d.titulo}</h3>
-      <p class="doc-desc">${d.descripcion}</p>
+      <h3 class="doc-title">${esc(d.titulo)}</h3>
+      <p class="doc-desc">${esc(d.descripcion)}</p>
       <div class="card-footer">
-        <span class="doc-meta">${iconPages} ${d.paginas||'—'} págs.</span>
-        ${d.url && d.url !== '#'
-          ? `<a href="${d.url}" target="_blank" class="pdf-link">${iconPDF} Ver PDF</a>`
+        <span class="doc-meta">${iconPages} ${esc(d.paginas||'—')} págs.</span>
+        ${u1
+          ? `<a href="${esc(u1)}" target="_blank" rel="noopener noreferrer" class="pdf-link">${iconPDF} Ver PDF</a>`
           : `<span class="pdf-link disabled">${iconPDF} Sin archivo</span>`}
-          ${d.url2
-          ? `<a href="${d.url2}" target="_blank" class="pdf-link">${iconPDF} ${d.label2 || 'Documento adicional'}</a>`
+        ${u2
+          ? `<a href="${esc(u2)}" target="_blank" rel="noopener noreferrer" class="pdf-link">${iconPDF} ${esc(d.label2 || 'Documento adicional')}</a>`
           : ''}
       </div>
     </div>
-  `).join('');
+  `;}).join('');
   document.getElementById(emptyId).style.display = items.length ? 'none' : 'block';
 }
 
@@ -823,20 +848,22 @@ function renderGastos() {
       <div class="gastos-year-block">
         <div class="gastos-year-header ${openClass}" onclick="toggleYear(this)">
           ${iconChev.replace('class="gastos-chevron"', `class="gastos-chevron ${openClass}"`)}
-          <span class="gastos-year-label">${yr}</span>
+          <span class="gastos-year-label">${esc(yr)}</span>
           <span class="gastos-year-count">${meses.length} mes${meses.length!==1?'es':''}</span>
         </div>
         <div class="gastos-months ${openClass}">
-          ${meses.map(d => `
+          ${meses.map(d => {
+            const u = safeUrl(d.url);
+            return `
             <div class="gastos-month-row">
               <div class="month-dot"></div>
-              <span class="month-name">${d.mes}</span>
-              <span class="month-desc">${d.descripcion}</span>
-              ${d.url && d.url !== '#'
-                ? `<a href="${d.url}" target="_blank" class="month-link">${iconPDF} Abrir PDF</a>`
+              <span class="month-name">${esc(d.mes)}</span>
+              <span class="month-desc">${esc(d.descripcion)}</span>
+              ${u
+                ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="month-link">${iconPDF} Abrir PDF</a>`
                 : `<span class="month-link disabled">${iconPDF} Sin archivo</span>`}
             </div>
-          `).join('')}
+          `;}).join('')}
         </div>
       </div>
     `;
@@ -882,19 +909,22 @@ function renderNoticias() {
     <path d="M6 48 Q6 52 17 52 Q28 52 28 48 L28 44 Q28 50 17 50 Q6 50 6 44 Z" fill="rgba(0,0,0,0.08)"/>
   </svg>`;
 
-  grid.innerHTML = items.map(d => `
+  grid.innerHTML = items.map(d => {
+    const imgSrc = safeUrl(d.imagen);
+    const u = safeUrl(d.url);
+    return `
     <div class="postit">
       <div class="postit-clip">${clipSVG}</div>
       <div class="postit-paper">
-        ${d.imagen ? `<img class="postit-img" src="${d.imagen}" alt="${d.titulo}">` : ''}
-        <span class="postit-author">${d.autor || 'Administración'}</span>
-        <h3 class="postit-title">${d.titulo}</h3>
-        <p class="postit-text">${d.descripcion}</p>
-        ${d.url && d.url !== '#' ? `<a href="${d.url}" target="_blank" class="postit-attach">${iconPDF} Adjunto</a>` : ''}
-        <span class="postit-date">${d.fecha}</span>
+        ${imgSrc ? `<img class="postit-img" src="${esc(imgSrc)}" alt="${esc(d.titulo)}">` : ''}
+        <span class="postit-author">${esc(d.autor || 'Administración')}</span>
+        <h3 class="postit-title">${esc(d.titulo)}</h3>
+        <p class="postit-text">${esc(d.descripcion)}</p>
+        ${u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="postit-attach">${iconPDF} Adjunto</a>` : ''}
+        <span class="postit-date">${esc(d.fecha)}</span>
       </div>
     </div>
-  `).join('');
+  `;}).join('');
 }
 
 // ── FORMULARIO ──
