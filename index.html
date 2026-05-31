@@ -67,7 +67,7 @@
   .rubric-icon.ic-green { background:#e6f4ec; color:#1a6638; }
   .rubric-icon.ic-amber { background:#fdf3e3; color:#8a5c10; }
   .rubric-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; color:var(--navy); line-height:1.25; margin-bottom:0.5rem; }
-  .rubric-desc  { font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:1.25rem; flex:1; }
+  .rubric-desc  { font-size:12px; color:var(--navy-deep); line-height:1.6; margin-bottom:1.25rem; flex:1; }
   .rubric-arrow { font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.06em; text-transform:uppercase; display:flex; align-items:center; gap:5px; }
   .rubric-arrow svg { width:13px; height:13px; }
 
@@ -337,7 +337,7 @@
     box-shadow:0 20px 60px rgba(10,20,30,0.25); animation:fadeUp 0.25s ease;
   }
   .form-modal h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:var(--navy); margin-bottom:0.35rem; }
-  .form-modal p.form-sub { font-size:12.5px; color:var(--muted); margin-bottom:1.5rem; line-height:1.6; }
+  .form-modal p.form-sub { font-size:12.5px; color:var(--navy-deep); margin-bottom:1.5rem; line-height:1.6; }
   .form-field { margin-bottom:1.1rem; }
   .form-field label { display:block; font-size:12px; font-weight:500; color:var(--navy); margin-bottom:5px; letter-spacing:0.03em; }
   .form-field input[type=text], .form-field textarea {
@@ -346,10 +346,15 @@
     background:var(--cream); outline:none; transition:border-color 0.2s; resize:vertical;
   }
   .form-field input[type=text]:focus, .form-field textarea:focus { border-color:#4ca5be; }
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+  color: rgba(226, 219, 219, 0.784);
+  opacity: 1;
+  }
   .form-field textarea { min-height:90px; }
   .upload-area {
     border:2px dashed var(--border); border-radius:8px; padding:1.25rem;
-    text-align:center; cursor:pointer; transition:border-color 0.2s, background 0.2s; background:var(--cream);
+    text-align:center; cursor:pointer; transition:border-color 0.2s, background 0.2s; background:var(--gold-light);
   }
   .upload-area:hover { border-color:#4ca5be; background:#f0f9fc; }
   .upload-area svg { width:28px; height:28px; color:var(--muted); margin:0 auto 0.5rem; display:block; }
@@ -358,12 +363,12 @@
   .upload-preview { width:100%; height:120px; object-fit:cover; border-radius:6px; margin-top:0.75rem; display:none; }
   .form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:1.5rem; }
   .btn-cancel {
-    background:none; border:1px solid var(--border); padding:9px 18px; border-radius:8px;
-    font-family:'Outfit',sans-serif; font-size:13px; color:var(--muted); cursor:pointer; transition:border-color 0.15s;
+    background:#f0f0f0; border:1px solid var(--border); padding:9px 18px; border-radius:8px;
+    font-family:'Outfit',sans-serif; font-size:13px; color:var(--#999999); cursor:pointer; transition:border-color 0.15s;
   }
   .btn-cancel:hover { border-color:var(--navy); color:var(--navy); }
   .btn-submit {
-    background:#4ca5be; color:var(--white); border:none; padding:9px 22px; border-radius:8px;
+    background:#4ca5be; color:var(--navy-deep); border:none; padding:9px 22px; border-radius:8px;
     font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:background 0.15s;
   }
   .btn-submit:hover { background:#3a8fa8; }
@@ -389,7 +394,7 @@
   .tab-section { display:none; }
   .tab-section.active { display:block; }
 
-  footer { border-top:1px solid var(--border); padding:1.5rem 2rem; text-align:center; font-size:12px; color:var(--muted); margin-top:2rem; }
+  footer { border-top:1px solid var(--border); padding:3rem 2rem 5rem; text-align:center; font-size:18px; color:var(--muted); margin-top:2rem; }
 
   @media(max-width:680px) {
     .rubric-grid { grid-template-columns:repeat(2,1fr); }
@@ -626,8 +631,8 @@
 <footer>
   Comunidad Edificio Don Germán · 
   <a href="mailto:ed.dongerman@gmail.com?subject=Consulta%20Edificio%20Don%20Germán&body=Hola%20Andrea%2C%20me%20comunico%20por..." 
-     style="color:var(--gold-light);text-decoration:none;font-weight:500;">
-    Andrea Parada · ed.dongerman@gmail.com
+     style="color:var(--gold-light);text-decoration:none;font-weight:800;">
+    ed.dongerman@gmail.com
   </a> 
   · Portal de residentes
 </footer>
@@ -636,7 +641,7 @@
 // ══════════════════════════════════════════════
 //  CONFIGURACIÓN
 // ══════════════════════════════════════════════
-const SHEET_ID  = 'TU_SHEET_ID_AQUI';
+const SHEET_ID  = '17lFHVnlzNRrxjLkwEvQLtVSzm8Y6OH0E8BPEI9FrCyE';
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 // ══════════════════════════════════════════════
@@ -646,15 +651,13 @@ const MESES_ORDEN = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','A
 
 const DEMO_DATA = [
   // Circulares
-  { tipo:'Circular', titulo:'Circular N°12 — Normas de uso ascensor', descripcion:'Recordatorio de normas de convivencia en el uso del ascensor y carga máxima permitida.', fecha:'Noviembre 2026', anio:'2026', mes:'', paginas:'2', url:'#' },
-  { tipo:'Circular', titulo:'Circular N°11 — Horarios de mudanzas', descripcion:'Se establecen los horarios permitidos para mudanzas y uso de montacargas.', fecha:'Septiembre 2026', anio:'2026', mes:'', paginas:'1', url:'#' },
-  { tipo:'Circular', titulo:'Circular N°10 — Mantención piscina', descripcion:'Aviso de cierre temporal de piscina para trabajos de mantención programada.', fecha:'Marzo 2026', anio:'2026', mes:'', paginas:'1', url:'#' },
-  { tipo:'Circular', titulo:'Circular N°9 — Mascotas en áreas comunes', descripcion:'Actualización de reglamento respecto al acceso de mascotas a zonas comunes.', fecha:'Enero 2025', anio:'2025', mes:'', paginas:'2', url:'#' },
+  { tipo:'Circular', titulo:'Circular N°1 — Normas de uso ascensor', descripcion:'Recordatorio de normas de convivencia en el uso del ascensor.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'2', url:'https://drive.google.com/file/d/1givs7j0LxtYqopceaoMy8T1JkqJSZPOk/view?usp=sharing' },
+  { tipo:'Circular', titulo:'Circular N°2 — Mascotas en áreas comunes', descripcion:'Reglamento respecto al acceso de mascotas a zonas comunes.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'1', url:'https://drive.google.com/file/d/1Os27TEuJ6EA9utICJ93FmYcX6AQQfIyI/view?usp=sharing' },
+  { tipo:'Circular', titulo:'Circular N°3 — Medidas de Seguridad', descripcion:'Instrucciones para velar por la seguridad de los residentes.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'1', url:'https://drive.google.com/file/d/1G0ZCbNrJq12q9YOPEZ-bxfx9J7x4MGOS/view?usp=sharing' },
   // Legales
   { tipo:'Legal', titulo:'Reglamento de copropiedad', descripcion:'Documento oficial que rige la convivencia, derechos y obligaciones de los copropietarios.', fecha:'Diciembre 1988', anio:'1988', mes:'', paginas:'48', url:'https://drive.google.com/file/d/19L99jSwSuAJIKCzutLzmh2Dx1JALq3Gy/view?usp=share_link' },
-  { tipo:'Legal', titulo:'Protocolo Convivencia 2026', descripcion:'normas básicas que regirán la vida en comunidad dentro del condominio, con el fin de garantizar una sana convivencia, el respeto mutuo', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'6', url:'https://drive.google.com/file/d/1Dvi1a4AbTaxkuNWcwQVbhXNIafa5Zpgx/view?usp=share_link' },
-  { tipo:'Legal', titulo:'Resumen Protocolo Convivencia 2026', descripcion:'Resumen de obligaciones, prohibiciones y límites para residentes', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'14', url:'https://drive.google.com/file/d/1Dvi1a4AbTaxkuNWcwQVbhXNIafa5Zpgx/view?usp=share_link' },
-  { tipo:'Legal', titulo:'Acta asamblea ordinaria 2026', descripcion:'Registro de acuerdos adoptados en la asamblea anual de copropietarios de abril 2026.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'8', url:'#' },
+  { tipo:'Legal', titulo:'Protocolo Convivencia 2026', descripcion:'normas básicas que regirán la vida en comunidad dentro del condominio, con el fin de garantizar una sana convivencia, el respeto mutuo', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'6', url:'https://drive.google.com/file/d/1Dvi1a4AbTaxkuNWcwQVbhXNIafa5Zpgx/view?usp=share_link', url2:'https://drive.google.com/file/d/1D6kPat6fYSJaVhD18hlIr1viGWIguey4/view?usp=share_link', label2:'Punteo' },
+  { tipo:'Legal', titulo:'Asamblea ordinaria 2026', descripcion:'Presentación asamblea anual de copropietarios de abril 2026.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'8', url:'https://drive.google.com/file/d/1vzHMj1OH8zo5FKq-JEuM-4RIIo77bmKc/view?usp=sharing', url2:'https://drive.google.com/file/d/1vzHMj1OH8zo5FKq-JEuM-4RIIo77bmKc/view?usp=sharing', label2:'Acta asamblea' },
   // Gastos — 2026
   { tipo:'Gastos', titulo:'Gastos comunes Abril 2026', descripcion:'Detalle de ingresos y egresos del mes de abril.', fecha:'Abril 2026', anio:'2026', mes:'Abril', paginas:'4', url:'https://drive.google.com/file/d/1P6RLAf_LyaVaJKgcbaeAhSmkykAYlq6D/view?usp=share_link' },
   { tipo:'Gastos', titulo:'Gastos comunes Marzo 2026', descripcion:'Detalle de ingresos y egresos del mes de marzo.', fecha:'Marzo 2026', anio:'2026', mes:'Marzo', paginas:'4', url:'https://drive.google.com/file/d/1nZEmV0wOC-yQPwO59JqhY3YxT4Pg0ZXb/view?usp=share_link' },
@@ -676,9 +679,9 @@ const DEMO_DATA = [
   // Gastos — 2025
   // Gastos — 2025
   // Noticias
-  { tipo:'Noticia', titulo:'Reparación tubería piso 8 — esta semana', descripcion:'El martes 3 y miércoles 4 se cortará el agua en los pisos 7 al 10 entre las 9:00 y 13:00 hrs.', fecha:'Diciembre 2026', anio:'2026', mes:'', paginas:'', autor:'Comité de Administración', url:'' },
-  { tipo:'Noticia', titulo:'¡Felices fiestas a toda la comunidad!', descripcion:'El comité desea a todos los residentes y sus familias una muy feliz Navidad y próspero año nuevo.', fecha:'Diciembre 2026', anio:'2026', mes:'', paginas:'', autor:'Comité de Administración', url:'' },
-  { tipo:'Noticia', titulo:'Se vende estacionamiento N°24', descripcion:'Estacionamiento doble cabida, excelente ubicación. Contactar depto 54.', fecha:'Noviembre 2026', anio:'2026', mes:'', paginas:'', autor:'Depto. 54', url:'' },
+  { tipo:'Noticia', titulo:'Invitamos a los vecinos a publicar', descripcion:'Publica cualquier informacion que te gustaria compartir con el edificio', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'', autor:'Vecino', url:'' },
+  { tipo:'Noticia', titulo:'Comienza el frio', descripcion:'Preparemosnos para recibir el frio y la lluvia', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'', autor:'Comité de Administración', url:'' },
+  //{ tipo:'Noticia', titulo:'Se vende estacionamiento N°24', descripcion:'Estacionamiento doble cabida, excelente ubicación. Contactar depto 54.', fecha:'Noviembre 2026', anio:'2026', mes:'', paginas:'', autor:'Depto. 54', url:'' },
 ];
 
 // ══════════════════════════════════════════════
@@ -794,6 +797,9 @@ function renderDocs(tipo, gridId, emptyId, countId) {
         ${d.url && d.url !== '#'
           ? `<a href="${d.url}" target="_blank" class="pdf-link">${iconPDF} Ver PDF</a>`
           : `<span class="pdf-link disabled">${iconPDF} Sin archivo</span>`}
+          ${d.url2
+          ? `<a href="${d.url2}" target="_blank" class="pdf-link">${iconPDF} ${d.label2 || 'Documento adicional'}</a>`
+          : ''}
       </div>
     </div>
   `).join('');
