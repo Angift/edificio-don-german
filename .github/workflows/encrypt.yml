@@ -1,0 +1,37 @@
+name: Encrypt and Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/index.html'
+
+jobs:
+  encrypt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Staticrypt
+        run: npm install -g staticrypt
+
+      - name: Encrypt HTML
+        run: |
+          staticrypt src/index.html \
+            --password ${{ secrets.SITE_PASSWORD }} \
+            --output index.html \
+            --short
+
+      - name: Commit encrypted file
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add index.html
+          git commit -m "Auto-encrypt index.html" || echo "No changes"
+          git push
