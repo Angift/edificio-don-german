@@ -23,10 +23,15 @@ jobs:
       - name: Install Staticrypt
         run: npm install -g staticrypt
 
+      - name: Check Staticrypt version
+        run: staticrypt --version
+
       - name: Encrypt HTML
         run: |
-          staticrypt src/index.html --password ${{ secrets.SITE_PASSWORD }}
-          echo "--- Todo lo generado ---"
+          echo "Corriendo staticrypt..."
+          staticrypt src/index.html --password ${{ secrets.SITE_PASSWORD }} -d .
+          echo "Exit code: $?"
+          echo "--- Archivos html ---"
           find . -name "*.html" | grep -v node_modules | grep -v ".git"
 
       - name: Commit encrypted file
