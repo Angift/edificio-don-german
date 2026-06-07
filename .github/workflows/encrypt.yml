@@ -10,13 +10,15 @@ on:
 jobs:
   encrypt:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Staticrypt
         run: npm install -g staticrypt
@@ -25,13 +27,12 @@ jobs:
         run: |
           staticrypt src/index.html \
             --password ${{ secrets.SITE_PASSWORD }} \
-            --output index.html \
-            --short
+            --output index.html
 
       - name: Commit encrypted file
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add index.html
-          git commit -m "Auto-encrypt index.html" || echo "No changes"
+          git diff --cached --quiet || git commit -m "Auto-encrypt index.html"
           git push
