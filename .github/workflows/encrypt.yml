@@ -28,6 +28,7 @@ jobs:
           staticrypt src/index.html \
             --password ${{ secrets.SITE_PASSWORD }} \
             --output index.html
+          ls -la
 
       - name: Commit encrypted file
         run: |
