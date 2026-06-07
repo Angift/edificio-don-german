@@ -25,13 +25,9 @@ jobs:
 
       - name: Encrypt HTML
         run: |
-          staticrypt src/index.html \
-            --password ${{ secrets.SITE_PASSWORD }} \
-            --output index.html
-          echo "--- Archivos en raiz ---"
-          ls -la
-          echo "--- Archivos en encrypted ---"
-          ls -la encrypted/ 2>/dev/null || echo "No existe carpeta encrypted"
+          staticrypt src/index.html --password ${{ secrets.SITE_PASSWORD }}
+          echo "--- Todo lo generado ---"
+          find . -name "*.html" | grep -v node_modules | grep -v ".git"
 
       - name: Commit encrypted file
         run: |
