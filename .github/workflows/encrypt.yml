@@ -23,21 +23,31 @@ jobs:
       - name: Install Staticrypt
         run: npm install -g staticrypt
 
-      - name: Check Staticrypt version
-        run: staticrypt --version
-
       - name: Encrypt HTML
         run: |
-          echo "Corriendo staticrypt..."
-          staticrypt src/index.html --password ${{ secrets.SITE_PASSWORD }} -d .
-          echo "Exit code: $?"
-          echo "--- Archivos html ---"
+          staticrypt src/index.html --password ${{ secrets.SITE_PASSWORD }} -d ./output
+          echo "--- Archivos en output ---"
+          ls -la ./output/ 2>/dev/null || echo "carpeta output no existe"
+          echo "--- Archivos html en todo el proyecto ---"
           find . -name "*.html" | grep -v node_modules | grep -v ".git"
+
+      - name: Mover archivo encriptado
+        run: |
+          if [ -f "./output/index.html" ]; then
+            cp ./output/index.html ./index.html
+            echo "Copiado desde output/index.html"
+          elif [ -f "./encrypted/index.html" ]; then
+            cp ./encrypted/index.html ./index.html
+            echo "Copiado desde encrypted/index.html"
+          else
+            echo "ERROR: no se encontro el archivo encriptado"
+            exit 1
+          fi
 
       - name: Commit encrypted file
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add -A
+          git add index.html
           git diff --cached --quiet || git commit -m "Auto-encrypt index.html"
           git push
