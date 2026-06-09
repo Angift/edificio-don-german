@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://docs.google.com https://spreadsheets.google.com; img-src 'self' data: https:; frame-ancestors 'none';">
+<meta name="description" content="Portal de residentes de la Comunidad Edificio Don Germán. Circulares, gastos comunes, documentos legales y tablero de noticias.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Comunidad Edificio Don Germán — Portal de Residentes">
+<meta property="og:description" content="Circulares, gastos comunes, documentos legales y tablero de noticias para los residentes del Edificio Don Germán.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://angift.github.io/edificio-don-german/">
+<link rel="canonical" href="https://angift.github.io/edificio-don-german/">
+<title>Comunidad Edificio Don Germán</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1b2a3b;
+    --navy-deep: #1e4672;
+    --gold: #c8a96e;
+    --gold-light: #e8d5a8;
+    --cream: #5f8083;
+    --cream-mid: #a2c7d1;
+    --cream-dark: #bbd1d5;
+    --white: #ffffff;
+    --muted: #ffffff;
+    --border: rgba(27,42,59,0.10);
+    --border-gold: rgba(200,169,110,0.35);
+    --shadow-hover: 0 10px 36px rgba(15,28,42,0.12);
+  }
+  body { font-family:'Outfit',sans-serif; background:var(--cream); color:var(--navy); min-height:100vh; }
+
+  /* HEADER */
+  header { background:var(--navy-deep); color:var(--white); padding:0; position:relative; overflow:hidden; cursor:pointer;  }
+  header:hover .building-badge { background: rgba(200,169,110,0.25); }
+  header::before {
+    content:''; position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(200,169,110,0.04) 60px,rgba(200,169,110,0.04) 61px);
+    pointer-events:none;
+  }
+  .header-inner { max-width:900px; margin:0 auto; padding:3.5rem 2rem 3rem; position:relative; text-align:center; }
+  .building-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(200,169,110,0.15); border:1px solid var(--border-gold);
+    border-radius:4px; padding:5px 16px; font-size:11px; font-weight:500;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-light); margin-bottom:1.5rem;
+  }
+  .building-badge::before { content:''; width:5px; height:5px; background:var(--gold); border-radius:50%; }
+  header h1 {
+    font-family:'Cormorant Garamond',serif; font-size:clamp(30px,5vw,50px);
+    font-weight:600; color:var(--white); line-height:1.1; margin-bottom:0.6rem;
+  }
+  header h1 span { color:var(--gold); }
+  .header-sub { font-size:13px; font-weight:300; color:rgba(255,255,255,0.45); letter-spacing:0.08em; }
+  .header-divider { width:40px; height:1px; background:var(--gold); margin:1.75rem auto 0; opacity:0.5; }
+
+  /* HERO */
+  .hero { background:var(--cream); padding:3.5rem 2rem 4rem; }
+  .hero-label { text-align:center; font-size:11px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:2.5rem; }
+  .rubric-grid { max-width:860px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; }
+  .rubric-card {
+    background:var(--white); border:1px solid var(--border); border-radius:16px;
+    padding:2rem 1.25rem 1.75rem; text-align:center; cursor:pointer;
+    transition:box-shadow 0.22s, transform 0.22s, border-color 0.22s;
+    text-decoration:none; color:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:0;
+  }
+  .rubric-card:hover { box-shadow:var(--shadow-hover); border-color:var(--border-gold); transform:translateY(-4px); }
+  .rubric-icon { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
+  .rubric-icon svg { width:24px; height:24px; }
+  .rubric-icon.ic-blue  { background:#e8f0fb; color:#2156a0; }
+  .rubric-icon.ic-rust  { background:#f2ebe6; color:#7a3520; }
+  .rubric-icon.ic-green { background:#e6f4ec; color:#1a6638; }
+  .rubric-icon.ic-amber { background:#fdf3e3; color:#8a5c10; }
+  .rubric-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; color:var(--navy); line-height:1.25; margin-bottom:0.5rem; }
+  .rubric-desc  { font-size:12px; color:var(--navy-deep); line-height:1.6; margin-bottom:1.25rem; flex:1; }
+  .rubric-arrow { font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.06em; text-transform:uppercase; display:flex; align-items:center; gap:5px; }
+  .rubric-arrow svg { width:13px; height:13px; }
+
+  /* TABS BAR */
+  .tabs-bar { background:var(--cream-mid); border-top:1px solid var(--border); border-bottom:1px solid var(--border); display:none; }
+  .tabs-bar.visible { display:block; }
+  .tabs-inner { max-width:900px; margin:0 auto; padding:0 2rem; display:flex; overflow-x:auto; scrollbar-width:none; }
+  .tabs-inner::-webkit-scrollbar { display:none; }
+  .tab-btn {
+    background:none; border:none; cursor:pointer; padding:0.9rem 1.5rem;
+    font-family:'Outfit',sans-serif; font-size:13px; font-weight:400; color:var(--muted);
+    white-space:nowrap; border-bottom:2px solid transparent;
+    transition:color 0.2s, border-color 0.2s; display:flex; align-items:center; gap:6px;
+  }
+  .tab-btn svg { width:14px; height:14px; opacity:0.6; }
+  .tab-btn:hover { color:var(--navy); }
+  .tab-btn.active { color:var(--navy); border-bottom-color:var(--gold); font-weight:500; }
+  .tab-btn.active svg { opacity:1; }
+
+  /* MAIN */
+  main { max-width:900px; margin:0 auto; padding:2rem; display:none; }
+  main.visible { display:block; }
+
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500;
+    color:var(--muted); cursor:pointer; border:none; background:none; padding:0;
+    margin-bottom:1.75rem; transition:color 0.15s; font-family:'Outfit',sans-serif;
+  }
+  .back-btn:hover { color:var(--navy); }
+  .back-btn svg { width:14px; height:14px; }
+
+  /* SEARCH */
+  .search-row { display:flex; gap:10px; margin-bottom:1.75rem; flex-wrap:wrap; }
+  .search-wrap { flex:1; min-width:200px; position:relative; }
+  .search-wrap svg { position:absolute; left:13px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--muted); pointer-events:none; }
+  .search-input {
+    width:100%; padding:10px 13px 10px 40px; border:1px solid var(--border); border-radius:8px;
+    background:var(--white); font-family:'Outfit',sans-serif; font-size:14px; color:var(--navy);
+    outline:none; transition:border-color 0.2s;
+  }
+  .search-input:focus { border-color:var(--gold); }
+  .search-input::placeholder { color:var(--muted); }
+  select.filter-sel {
+    padding:10px 30px 10px 13px; border:1px solid var(--border); border-radius:8px;
+    background:var(--white); font-family:'Outfit',sans-serif; font-size:13px; color:var(--navy);
+    outline:none; cursor:pointer; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a96a3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center;
+  }
+  select.filter-sel:focus { border-color:var(--gold); }
+
+  /* SECTION LABEL */
+  .section-label { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; }
+  .section-label h2 { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; color:var(--navy); }
+  .count-badge { font-size:12px; color:var(--muted); background:var(--cream-dark); padding:3px 10px; border-radius:20px; }
+
+  /* DOC CARDS */
+  .doc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1rem; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .doc-card {
+    background:var(--white); border:1px solid var(--border); border-radius:12px;
+    padding:1.25rem; display:flex; flex-direction:column; gap:0.75rem;
+    transition:box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    animation:fadeUp 0.28s ease both;
+  }
+  .doc-card:hover { box-shadow:var(--shadow-hover); border-color:var(--border-gold); transform:translateY(-2px); }
+  .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .cat-pill { font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; padding:4px 10px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+  .cat-circular { background:#e8f0fb; color:#2156a0; }
+  .cat-legal    { background:#f2ebe6; color:#7a3520; }
+  .cat-gastos   { background:#e6f4ec; color:#1a6638; }
+  .cat-noticias { background:#fdf3e3; color:#8a5c10; }
+  .doc-date  { font-size:11px; color:var(--muted); white-space:nowrap; flex-shrink:0; }
+  .doc-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:500; color:var(--navy); line-height:1.3; }
+  .doc-desc  { font-size:12.5px; color:var(--muted); line-height:1.65; flex:1; }
+  .card-footer { display:flex; align-items:center; justify-content:space-between; padding-top:0.75rem; border-top:1px solid var(--border); }
+  .doc-meta { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:4px; }
+  .doc-meta svg { width:13px; height:13px; }
+  .pdf-link {
+    display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500;
+    color:var(--navy); text-decoration:none; background:var(--cream-mid);
+    border:1px solid var(--border); padding:5px 12px; border-radius:6px;
+    transition:background 0.15s, color 0.15s;
+  }
+  .pdf-link svg { width:13px; height:13px; }
+  .pdf-link:hover { background:var(--navy); color:var(--white); border-color:var(--navy); }
+  .pdf-link.disabled { opacity:0.35; cursor:default; pointer-events:none; }
+
+  /* ── GASTOS TREE ── */
+  .gastos-year-block { margin-bottom:1.25rem; animation:fadeUp 0.28s ease both; }
+  .gastos-year-header {
+    display:flex; align-items:center; gap:10px; padding:0.9rem 1.25rem;
+    background:var(--white); border:1px solid var(--border); border-radius:10px;
+    cursor:pointer; transition:border-color 0.2s, box-shadow 0.2s; user-select:none;
+  }
+  .gastos-year-header:hover { border-color:var(--border-gold); box-shadow:0 2px 12px rgba(15,28,42,0.07); }
+  .gastos-year-header.open { border-radius:10px 10px 0 0; border-bottom-color:var(--cream-mid); }
+  .gastos-chevron { width:16px; height:16px; color:var(--muted); transition:transform 0.2s; flex-shrink:0; }
+  .gastos-chevron.open { transform:rotate(90deg); }
+  .gastos-year-label { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:500; color:var(--navy); flex:1; }
+  .gastos-year-count { font-size:11px; color:var(--muted); background:var(--cream-dark); padding:2px 9px; border-radius:20px; }
+
+  .gastos-months {
+    border:1px solid var(--border); border-top:none;
+    border-radius:0 0 10px 10px; overflow:hidden; display:none;
+  }
+  .gastos-months.open { display:block; }
+
+  .gastos-month-row {
+    display:flex; align-items:center; gap:12px;
+    padding:0.85rem 1.25rem 0.85rem 2.75rem;
+    border-bottom:1px solid var(--border);
+    background:var(--white);
+    transition:background 0.15s;
+  }
+  .gastos-month-row:last-child { border-bottom:none; }
+  .gastos-month-row:hover { background:var(--cream); }
+  .month-dot { width:7px; height:7px; border-radius:50%; background:var(--border-gold); flex-shrink:0; border:1.5px solid var(--gold); }
+  .month-name { font-size:14px; color:var(--navy); flex:1; font-weight:400; }
+  .month-desc { font-size:12px; color:var(--muted); flex:2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .month-link {
+    display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500;
+    color:var(--navy); text-decoration:none; background:var(--cream-mid);
+    border:1px solid var(--border); padding:5px 12px; border-radius:6px; flex-shrink:0;
+    transition:background 0.15s, color 0.15s;
+  }
+  .month-link svg { width:13px; height:13px; }
+  .month-link:hover { background:var(--navy); color:var(--white); border-color:var(--navy); }
+  .month-link.disabled { opacity:0.35; cursor:default; pointer-events:none; }
+
+  /* ── MURAL / TABLERO ── */
+  .mural-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:1.75rem; flex-wrap:wrap; gap:1rem;
+  }
+  .mural-header h2 { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; color:var(--navy); }
+  .btn-nueva-noticia {
+    display:inline-flex; align-items:center; gap:7px;
+    background:var(--navy); color:var(--white); border:none; cursor:pointer;
+    font-family:'Outfit',sans-serif; font-size:13px; font-weight:500;
+    padding:9px 18px; border-radius:8px; transition:background 0.15s;
+  }
+  .btn-nueva-noticia:hover { background:#2d3f52; }
+  .btn-nueva-noticia svg { width:15px; height:15px; }
+
+  .news-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:3rem 2rem;
+    padding-top:2.5rem;
+  }
+
+  /* ── POST-IT con clip y hojas apiladas ── */
+  .postit {
+    position:relative;
+    margin-top:28px; /* espacio para el clip */
+    animation:fadeUp 0.3s ease both;
+    z-index:1;
+  }
+
+  /* Colores por variante */
+  .postit:nth-child(5n+1) { --pi:#f9e84e; --pi-dark:#e0cc35; --pi-text:#3a3000; --pi-muted:#7a6800; }
+  .postit:nth-child(5n+2) { --pi:#fdcfe8; --pi-dark:#f0aed4; --pi-text:#5a0030; --pi-muted:#a0436d; }
+  .postit:nth-child(5n+3) { --pi:#b2f0b2; --pi-dark:#8ee08e; --pi-text:#0e3d0e; --pi-muted:#2e7d2e; }
+  .postit:nth-child(5n+4) { --pi:#b3e5fc; --pi-dark:#7dcef5; --pi-text:#00304a; --pi-muted:#1a6a8a; }
+  .postit:nth-child(5n+5) { --pi:#ffd6a5; --pi-dark:#f5be76; --pi-text:#4a1f00; --pi-muted:#9a5010; }
+
+  /* Hoja trasera 2 (la más atrás) */
+  .postit::before {
+    content:'';
+    position:absolute; inset:0; top:0;
+    background:#e8e8e8;
+    border-radius:2px;
+    transform:rotate(4deg) translate(5px, 6px);
+    z-index:-2;
+    box-shadow:1px 3px 8px rgba(0,0,0,0.10);
+  }
+  /* Hoja trasera 1 (intermedia) */
+  .postit::after {
+    content:'';
+    position:absolute; inset:0; top:0;
+    background:#f2f2f2;
+    border-radius:2px;
+    transform:rotate(-2.5deg) translate(-3px, 4px);
+    z-index:-1;
+    box-shadow:1px 3px 8px rgba(0,0,0,0.09);
+  }
+
+  /* Clip metálico centrado en la parte superior */
+  .postit-clip {
+    position:absolute;
+    top:-28px; left:50%; transform:translateX(-50%);
+    z-index:10;
+    width:34px; height:54px;
+    pointer-events:none;
+  }
+
+  /* Papel principal con contenido */
+  .postit-paper {
+    background:var(--pi);
+    border-radius:2px;
+    padding:1.1rem 1.1rem 1.5rem;
+    display:flex; flex-direction:column; gap:0.5rem;
+    min-height:210px;
+    position:relative; overflow:hidden;
+    transform:rotate(-1deg);
+    transform-origin:top center;
+    transition:transform 0.22s, box-shadow 0.22s;
+    box-shadow:3px 5px 16px rgba(0,0,0,0.18), 0 2px 4px rgba(0,0,0,0.10);
+    /* líneas de papel */
+    background-image:repeating-linear-gradient(
+      transparent, transparent 23px,
+      rgba(0,0,0,0.055) 23px, rgba(0,0,0,0.055) 24px
+    );
+  }
+  .postit:nth-child(even) .postit-paper { transform:rotate(1.1deg); }
+  .postit:hover .postit-paper {
+    transform:rotate(0deg) translateY(-5px);
+    box-shadow:5px 12px 28px rgba(0,0,0,0.22), 0 3px 6px rgba(0,0,0,0.12);
+  }
+
+  /* Esquina doblada abajo-derecha */
+  .postit-paper::after {
+    content:'';
+    position:absolute; bottom:0; right:0;
+    width:26px; height:26px;
+    background:linear-gradient(
+      225deg,
+      rgba(255,255,255,0.92) 43%,
+      rgba(0,0,0,0.09) 50%,
+      var(--pi-dark) 57%
+    );
+  }
+
+  /* Franja adhesiva superior (más oscura) */
+  .postit-paper::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:7px;
+    background:var(--pi-dark);
+    opacity:0.55;
+  }
+
+  .postit-img { width:calc(100% + 2.2rem); margin:4px -1.1rem 0.6rem; height:100px; object-fit:cover; flex-shrink:0; }
+  .postit-author { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--pi-muted); margin-top:6px; }
+  .postit-title  { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:700; color:var(--pi-text); line-height:1.3; }
+  .postit-text   { font-size:12.5px; color:var(--pi-text); opacity:0.82; line-height:1.65; flex:1; }
+  .postit-date   { font-size:11px; color:var(--pi-muted); margin-top:auto; padding-top:0.5rem; }
+  .postit-attach {
+    display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600;
+    color:var(--pi-muted); text-decoration:none;
+    border-bottom:1px dashed var(--pi-muted);
+    width:fit-content; padding-bottom:1px; opacity:0.8; transition:opacity 0.15s;
+  }
+  .postit-attach:hover { opacity:1; }
+  .postit-attach svg { width:11px; height:11px; }
+
+  /* ── FORMULARIO NUEVA NOTICIA ── */
+  .form-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(10,20,30,0.55); z-index:100;
+    align-items:center; justify-content:center; padding:1.5rem;
+  }
+  .form-overlay.open { display:flex; }
+  .form-modal {
+    background:var(--white); border-radius:16px; padding:2rem;
+    width:100%; max-width:520px; max-height:90vh; overflow-y:auto;
+    box-shadow:0 20px 60px rgba(10,20,30,0.25); animation:fadeUp 0.25s ease;
+  }
+  .form-modal h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:var(--navy); margin-bottom:0.35rem; }
+  .form-modal p.form-sub { font-size:12.5px; color:var(--navy-deep); margin-bottom:1.5rem; line-height:1.6; }
+  .form-field { margin-bottom:1.1rem; }
+  .form-field label { display:block; font-size:12px; font-weight:500; color:var(--navy); margin-bottom:5px; letter-spacing:0.03em; }
+  .form-field input[type=text], .form-field textarea {
+    width:100%; padding:10px 13px; border:1px solid var(--border); border-radius:8px;
+    font-family:'Outfit',sans-serif; font-size:14px; color:var(--navy);
+    background:var(--cream); outline:none; transition:border-color 0.2s; resize:vertical;
+  }
+  .form-field input[type=text]:focus, .form-field textarea:focus { border-color:#4ca5be; }
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+  color: rgba(226, 219, 219, 0.784);
+  opacity: 1;
+  }
+  .form-field textarea { min-height:90px; }
+  .upload-area {
+    border:2px dashed var(--border); border-radius:8px; padding:1.25rem;
+    text-align:center; cursor:pointer; transition:border-color 0.2s, background 0.2s; background:var(--gold-light);
+  }
+  .upload-area:hover { border-color:#4ca5be; background:#f0f9fc; }
+  .upload-area svg { width:28px; height:28px; color:var(--muted); margin:0 auto 0.5rem; display:block; }
+  .upload-area p { font-size:12px; color:var(--muted); }
+  .upload-area input { display:none; }
+  .upload-preview { width:100%; height:120px; object-fit:cover; border-radius:6px; margin-top:0.75rem; display:none; }
+  .form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:1.5rem; }
+  .btn-cancel {
+    background:#f0f0f0; border:1px solid var(--border); padding:9px 18px; border-radius:8px;
+    font-family:'Outfit',sans-serif; font-size:13px; color:var(--#999999); cursor:pointer; transition:border-color 0.15s;
+  }
+  .btn-cancel:hover { border-color:var(--navy); color:var(--navy); }
+  .btn-submit {
+    background:#4ca5be; color:var(--navy-deep); border:none; padding:9px 22px; border-radius:8px;
+    font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:background 0.15s;
+  }
+  .btn-submit:hover { background:#3a8fa8; }
+  .form-success { display:none; text-align:center; padding:1.5rem 0; }
+  .form-success svg { width:44px; height:44px; color:#4ca5be; margin:0 auto 1rem; display:block; }
+  .form-success h4 { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--navy); margin-bottom:0.5rem; }
+  .form-success p { font-size:13px; color:var(--muted); line-height:1.6; }
+
+  /* EMPTY */
+  .empty { text-align:center; padding:4rem 2rem; color:var(--muted); font-size:14px; display:none; }
+  .empty svg { width:36px; height:36px; margin:0 auto 1rem; opacity:0.25; display:block; }
+
+  /* SETUP BANNER */
+  .setup-banner {
+    background:var(--navy); color:var(--white); border-radius:12px;
+    padding:1.25rem 1.5rem; margin-bottom:2rem; display:flex; align-items:flex-start; gap:1rem;
+  }
+  .setup-banner svg { width:18px; height:18px; flex-shrink:0; color:var(--gold); margin-top:2px; }
+  .setup-banner h3 { font-size:13px; font-weight:500; margin-bottom:0.35rem; color:var(--gold); }
+  .setup-banner p  { font-size:12px; color:rgba(255,255,255,0.55); line-height:1.7; }
+  .setup-banner code { background:rgba(255,255,255,0.12); padding:1px 5px; border-radius:3px; font-size:11px; }
+
+  .tab-section { display:none; }
+  .tab-section.active { display:block; }
+
+  footer { border-top:1px solid var(--border); padding:3rem 2rem 5rem; text-align:center; font-size:18px; color:var(--muted); margin-top:2rem; }
+
+  @media(max-width:680px) {
+    .rubric-grid { grid-template-columns:repeat(2,1fr); }
+    .header-inner { padding:2.5rem 1.25rem 2rem; }
+    main { padding:1.25rem; }
+    .tabs-inner { padding:0 1rem; }
+    .month-desc { display:none; }
+  }
+  @media(max-width:380px) { .rubric-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header onclick="goHome()">
+  <div class="header-inner">
+    <div class="building-badge">Portal de Residentes</div>
+    <h1>Comunidad Edificio<br><span>Don Germán</span></h1>
+    <p class="header-sub">Transparencia · Información · Comunidad</p>
+    <div class="header-divider"></div>
+  </div>
+</header>
+
+<!-- HERO: 4 RUBRICS -->
+<section class="hero" id="hero-section">
+  <p class="hero-label">Selecciona una sección</p>
+  <div class="rubric-grid">
+
+    <div class="rubric-card" onclick="openSection('gastos')">
+      <div class="rubric-icon ic-green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      </div>
+      <p class="rubric-title">Gastos comunes</p>
+      <p class="rubric-desc">Rendiciones mensuales de ingresos y egresos del edificio</p>
+      <span class="rubric-arrow">Ver por año y mes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+    </div>
+
+    <div class="rubric-card" onclick="openSection('circulares')">
+      <div class="rubric-icon ic-blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+      </div>
+      <p class="rubric-title">Circulares</p>
+      <p class="rubric-desc">Comunicados oficiales y avisos de la administración</p>
+      <span class="rubric-arrow">Ver documentos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+    </div>
+
+    <div class="rubric-card" onclick="openSection('legal')">
+      <div class="rubric-icon ic-rust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/></svg>
+      </div>
+      <p class="rubric-title">Documentos legales</p>
+      <p class="rubric-desc">Reglamentos, actas y contratos de la copropiedad</p>
+      <span class="rubric-arrow">Ver documentos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+    </div>
+
+    <div class="rubric-card" onclick="openSection('noticias')">
+      <div class="rubric-icon ic-amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+      </div>
+      <p class="rubric-title">Tablero de noticias</p>
+      <p class="rubric-desc">Publicaciones y avisos de vecinos de la comunidad</p>
+      <span class="rubric-arrow">Ver publicaciones <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></span>
+    </div>
+
+  </div>
+</section>
+
+<!-- TABS -->
+<div class="tabs-bar" id="tabs-bar">
+  <div class="tabs-inner">
+   <button class="tab-btn" id="tab-btn-gastos" onclick="switchTab('gastos',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Gastos comunes
+    </button>
+    <button class="tab-btn" id="tab-btn-circulares" onclick="switchTab('circulares',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+      Circulares
+    </button>
+    <button class="tab-btn" id="tab-btn-legal" onclick="switchTab('legal',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/></svg>
+      Documentos legales
+    </button>
+    <button class="tab-btn" id="tab-btn-noticias" onclick="switchTab('noticias',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+      Tablero de noticias
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="main-content">
+
+  <button class="back-btn" onclick="goHome()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+    Volver al inicio
+  </button>
+
+  <!-- SETUP BANNER
+  <div class="setup-banner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+    <!-- <div>
+      <h3>Instrucciones de configuración — eliminar antes de publicar</h3>
+      <p>
+        1. Crea un Google Sheet con estas columnas exactas:<br>
+        <code>tipo</code> · <code>titulo</code> · <code>descripcion</code> · <code>fecha</code> · <code>anio</code> · <code>mes</code> · <code>paginas</code> · <code>url</code> · <code>autor</code><br><br>
+        2. Para gastos: <code>tipo = Gastos</code>, llena <code>anio</code> (ej: 2026) y <code>mes</code> (ej: Marzo), y pega el enlace de Google Drive en <code>url</code>.<br>
+        3. Publica el Sheet: Archivo → Compartir → Publicar en la web → CSV → Hoja 1.<br>
+        4. Copia el ID del Sheet (la parte larga de la URL entre /d/ y /edit) y reemplaza <code>TU_SHEET_ID_AQUI</code> abajo en el script.
+      </p>
+    </div> -->
+  </div> -->
+
+  <!-- CIRCULARES -->
+  <div id="tab-circulares" class="tab-section">
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" type="text" placeholder="Buscar circulares…" oninput="filterDocs('circulares',this.value)">
+      </div>
+      <select class="filter-sel" onchange="filterByYear('circulares',this.value)" id="sel-circulares">
+        <option value="">Todos los años</option>
+      </select>
+    </div>
+    <div class="section-label">
+      <h2>Circulares</h2>
+      <span class="count-badge" id="count-circulares">0 documentos</span>
+    </div>
+    <div class="doc-grid" id="grid-circulares"></div>
+    <div class="empty" id="empty-circulares">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+      No se encontraron circulares.
+    </div>
+  </div>
+
+  <!-- LEGAL -->
+  <div id="tab-legal" class="tab-section">
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" type="text" placeholder="Buscar documentos legales…" oninput="filterDocs('legal',this.value)">
+      </div>
+      <select class="filter-sel" onchange="filterByYear('legal',this.value)" id="sel-legal">
+        <option value="">Todos los años</option>
+      </select>
+    </div>
+    <div class="section-label">
+      <h2>Documentos legales</h2>
+      <span class="count-badge" id="count-legal">0 documentos</span>
+    </div>
+    <div class="doc-grid" id="grid-legal"></div>
+    <div class="empty" id="empty-legal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L3 7l9 5 9-5-9-5z"/></svg>
+      No se encontraron documentos.
+    </div>
+  </div>
+
+  <!-- GASTOS -->
+  <div id="tab-gastos" class="tab-section">
+    <div class="search-row">
+      <select class="filter-sel" onchange="filterGastosYear(this.value)" id="sel-gastos">
+        <option value="">Todos los años</option>
+      </select>
+    </div>
+    <div class="section-label">
+      <h2>Gastos comunes</h2>
+      <span class="count-badge" id="count-gastos">0 registros</span>
+    </div>
+    <div id="grid-gastos"></div>
+    <div class="empty" id="empty-gastos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      No hay registros de gastos comunes.
+    </div>
+  </div>
+
+   <!-- NOTICIAS -->
+  <div id="tab-noticias" class="tab-section">
+    <div class="mural-header">
+      <h2>Tablero de noticias</h2>
+      <button class="btn-nueva-noticia" onclick="abrirFormulario()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>
+        Publicar aviso
+      </button>
+    </div>
+    <div class="news-grid" id="grid-noticias"></div>
+    <div class="empty" id="empty-noticias">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2z"/></svg>
+      No hay publicaciones recientes.
+    </div>
+  </div>
+
+  <!-- MODAL FORMULARIO -->
+  <div class="form-overlay" id="form-overlay" onclick="cerrarSiOverlay(event)">
+    <div class="form-modal">
+
+      <div id="form-body">
+        <h3>Publicar aviso en el tablero</h3>
+        <p class="form-sub">Tu aviso será revisado por la administración antes de publicarse. Andrea recibirá un email con tu mensaje.</p>
+
+        <form id="aviso-form" onsubmit="enviarFormulario(event)">
+
+          <div class="form-field">
+            <label>Tu nombre y departamento</label>
+            <input type="text" name="nombre" placeholder="Ej: María González — Depto 42" required>
+          </div>
+
+          <div class="form-field">
+            <label>Título del aviso</label>
+            <input type="text" name="titulo" placeholder="Ej: Se arrienda estacionamiento N°12" required>
+          </div>
+
+          <div class="form-field">
+            <label>Mensaje</label>
+            <textarea name="mensaje" placeholder="Escribe el detalle de tu aviso aquí…" required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="cerrarFormulario()">Cancelar</button>
+            <button type="submit" class="btn-submit">Enviar a administración →</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        <h4>¡Aviso enviado!</h4>
+        <p>Andrea recibió tu mensaje y lo revisará pronto.<br>Si es aprobado, aparecerá en el tablero.</p>
+        <button class="btn-submit" style="margin-top:1.25rem;" onclick="cerrarFormulario()">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Comunidad Edificio Don Germán · 
+  <a href="mailto:ed.dongerman@gmail.com?subject=Consulta%20Edificio%20Don%20Germán&body=Hola%20Andrea%2C%20me%20comunico%20por..."
+     rel="noopener noreferrer"
+     style="color:var(--gold-light);text-decoration:none;font-weight:800;">
+    ed.dongerman@gmail.com
+  </a> 
+  · Portal de residentes
+</footer>
+
+<script>
+// ══════════════════════════════════════════════
+//  SEGURIDAD — sanitización de datos
+// ══════════════════════════════════════════════
+function esc(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function safeUrl(url) {
+  if (!url || url === '#') return null;
+  const s = String(url).trim();
+  return (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('mailto:')) ? s : null;
+}
+
+// ══════════════════════════════════════════════
+//  CONFIGURACIÓN
+// ══════════════════════════════════════════════
+const SHEET_ID  = '17lFHVnlzNRrxjLkwEvQLtVSzm8Y6OH0E8BPEI9FrCyE';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+// ══════════════════════════════════════════════
+//  DATOS DE EJEMPLO
+// ══════════════════════════════════════════════
+const MESES_ORDEN = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+const DEMO_DATA = [
+  // Circulares
+  { tipo:'Circular', titulo:'Circular N°1 — Normas de uso ascensor', descripcion:'Recordatorio de normas de convivencia en el uso del ascensor.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'2', url:'https://drive.google.com/file/d/1givs7j0LxtYqopceaoMy8T1JkqJSZPOk/view?usp=sharing' },
+  { tipo:'Circular', titulo:'Circular N°2 — Mascotas en áreas comunes', descripcion:'Reglamento respecto al acceso de mascotas a zonas comunes.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'1', url:'https://drive.google.com/file/d/1Os27TEuJ6EA9utICJ93FmYcX6AQQfIyI/view?usp=sharing' },
+  { tipo:'Circular', titulo:'Circular N°3 — Medidas de Seguridad', descripcion:'Instrucciones para velar por la seguridad de los residentes.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'1', url:'https://drive.google.com/file/d/1G0ZCbNrJq12q9YOPEZ-bxfx9J7x4MGOS/view?usp=sharing' },
+  // Legales
+  { tipo:'Legal', titulo:'Reglamento de copropiedad', descripcion:'Documento oficial que rige la convivencia, derechos y obligaciones de los copropietarios.', fecha:'Diciembre 1988', anio:'1988', mes:'', paginas:'48', url:'https://drive.google.com/file/d/19L99jSwSuAJIKCzutLzmh2Dx1JALq3Gy/view?usp=share_link' },
+  { tipo:'Legal', titulo:'Protocolo Convivencia 2026', descripcion:'Normas básicas que regirán la vida en comunidad dentro del condominio, con el fin de garantizar una sana convivencia y el respeto mutuo', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'6', url:'https://drive.google.com/file/d/1Dvi1a4AbTaxkuNWcwQVbhXNIafa5Zpgx/view?usp=share_link', url2:'https://drive.google.com/file/d/1D6kPat6fYSJaVhD18hlIr1viGWIguey4/view?usp=share_link', label2:'Punteo' },
+  { tipo:'Legal', titulo:'Asamblea ordinaria 2026', descripcion:'Presentación asamblea anual de copropietarios de abril 2026.', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'8', url:'https://drive.google.com/file/d/1vzHMj1OH8zo5FKq-JEuM-4RIIo77bmKc/view?usp=sharing', url2:'https://drive.google.com/file/d/1vzHMj1OH8zo5FKq-JEuM-4RIIo77bmKc/view?usp=sharing', label2:'Acta asamblea' },
+  // Gastos — 2026
+  { tipo:'Gastos', titulo:'Gastos comunes Abril 2026', descripcion:'Detalle de egresos del mes de abril.', fecha:'Abril 2026', anio:'2026', mes:'Abril', paginas:'4', url:'https://drive.google.com/file/d/1P6RLAf_LyaVaJKgcbaeAhSmkykAYlq6D/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Marzo 2026', descripcion:'Detalle de egresos del mes de marzo.', fecha:'Marzo 2026', anio:'2026', mes:'Marzo', paginas:'4', url:'https://drive.google.com/file/d/1nZEmV0wOC-yQPwO59JqhY3YxT4Pg0ZXb/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Febrero 2026', descripcion:'Detalle de egresos del mes de febrero.', fecha:'Febrero 2026', anio:'2026', mes:'Febrero', paginas:'4', url:'https://drive.google.com/file/d/1etNrPY7nsVv2E-lQaUD9JzL1G4WOM781/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Enero 2026', descripcion:'Detalle de egresos del mes de enero.', fecha:'Enero 2026', anio:'2026', mes:'Enero', paginas:'4', url:'https://drive.google.com/file/d/1yJ8CcuIpGqo1Uk26LkgnntDtxb8rO4p5/view?usp=share_link' },
+  // Gastos — 2025
+  { tipo:'Gastos', titulo:'Gastos comunes Diciembre 2025', descripcion:'Detalle de egresos del mes de diciembre.', fecha:'Diciembre 2025', anio:'2025', mes:'Diciembre', paginas:'4', url:'https://drive.google.com/file/d/1bbLRx9gZVBMWuvjpVLG1RoDEfHfJTVo9/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Noviembre 2025', descripcion:'Detalle de egresos del mes de noviembre.', fecha:'Noviembre 2025', anio:'2025', mes:'Noviembre', paginas:'4', url:'https://drive.google.com/file/d/1KxGZPCa6UpHTRdC-y6cWkZpQgpFnfiGE/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Octubre 2025', descripcion:'Detalle de egresos del mes de octubre.', fecha:'Octubre 2025', anio:'2025', mes:'Octubre', paginas:'4', url:'https://drive.google.com/file/d/1igRJJ4DcLPyULRAb5Az84gcC5L7VKk1R/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Septiembre 2025', descripcion:'Detalle de egresos del mes de septiembre.', fecha:'Septiembre 2025', anio:'2025', mes:'Septiembre', paginas:'4', url:'https://drive.google.com/file/d/1CrlVF_6jtWXmAcdDaN2Lhhj-kIS9MoJW/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Agosto 2025', descripcion:'Detalle de egresos del mes de agosto.', fecha:'Agosto 2025', anio:'2025', mes:'Agosto', paginas:'4', url:'https://drive.google.com/file/d/1TLxVG8l0r5G-v1-z04a8U9UQF2nfGH5e/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Julio 2025', descripcion:'Detalle de egresos del mes de julio.', fecha:'Julio 2025', anio:'2025', mes:'Julio', paginas:'4', url:'https://drive.google.com/file/d/1TD7kc1j1NX0NqS2Gs2cIrXXkvKtuo4C9/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Junio 2026', descripcion:'Detalle de egresos del mes de junio.', fecha:'Junio 2025', anio:'2025', mes:'Junio', paginas:'4', url:'https://drive.google.com/file/d/1XLwX-2HLO-LYu26g8S6ah8IabXnkoIdY/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Mayo 2025', descripcion:'Detalle de egresos del mes de mayo.', fecha:'Mayo 2025', anio:'2025', mes:'Mayo', paginas:'4', url:'https://drive.google.com/file/d/1SOvkFDz5jXA928j7JlJ2QqTy11JUoc9s/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Abril 2025', descripcion:'Detalle de egresos del mes de abril.', fecha:'Abril 2025', anio:'2025', mes:'Abril', paginas:'4', url:'https://drive.google.com/file/d/1jC-SYzxflOComQKLqRvkEWFzYV6cn6zI/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Marzo 2025', descripcion:'Detalle de egresos del mes de marzo.', fecha:'Marzo 2025', anio:'2025', mes:'Marzo', paginas:'4', url:'https://drive.google.com/file/d/1yaw2P9mmoOCpjR8XO6hLDsDASuukACaE/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Febrero 2025', descripcion:'Detalle de egresos del mes de febrero.', fecha:'Febrero 2025', anio:'2025', mes:'Febrero', paginas:'4', url:'https://drive.google.com/file/d/1o_vuCwbkhvBOJj62SaffITyOWtGihvfJ/view?usp=share_link' },
+  { tipo:'Gastos', titulo:'Gastos comunes Enero 2025', descripcion:'Detalle de egresos del mes de enero.', fecha:'Enero 2025', anio:'2025', mes:'Enero', paginas:'4', url:'https://drive.google.com/file/d/1o_vuCwbkhvBOJj62SaffITyOWtGihvfJ/view?usp=share_link' },
+  // Gastos — 2024
+  // Gastos — 2023
+  // Noticias
+  { tipo:'Noticia', titulo:'Invitamos a los vecinos a publicar', descripcion:'Publica informacion que te gustaria compartir con el edificio', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'', autor:'Vecino', url:'' },
+  { tipo:'Noticia', titulo:'Comienza el frio', descripcion:'Preparemosnos para recibir el frio y la lluvia', fecha:'Mayo 2026', anio:'2026', mes:'', paginas:'', autor:'Comité de Administración', url:'' },
+  { tipo:'Noticia', titulo:'En comunidad nos cuidamos', descripcion:'Favor reportar cualquier actividad sospechosa', anio:'2026', mes:'', paginas:'', autor:'Administración', url:'' },
+];
+
+// ══════════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════════
+let allData      = DEMO_DATA;
+let filters      = { circulares:'', legal:'' };
+let yearFilters  = { circulares:'', legal:'' };
+let gastosYear   = '';
+
+// ══════════════════════════════════════════════
+//  NAVEGACIÓN
+// ══════════════════════════════════════════════
+function openSection(sec) {
+  document.getElementById('hero-section').style.display = 'none';
+  document.getElementById('tabs-bar').classList.add('visible');
+  document.getElementById('main-content').classList.add('visible');
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${sec}`).classList.add('active');
+  const btn = document.getElementById(`tab-btn-${sec}`);
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function switchTab(sec, btn) {
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${sec}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+function goHome() {
+  document.getElementById('hero-section').style.display = '';
+  document.getElementById('tabs-bar').classList.remove('visible');
+  document.getElementById('main-content').classList.remove('visible');
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ══════════════════════════════════════════════
+//  CARGA
+// ══════════════════════════════════════════════
+function loadData() {
+  buildYearFilters();
+  renderAll();
+}
+
+function buildYearFilters() {
+  // Circulares y Legal
+  ['circulares','legal'].forEach(key => {
+    const tipo  = key === 'circulares' ? 'Circular' : 'Legal';
+    const years = [...new Set(allData.filter(d=>d.tipo===tipo).map(d=>d.anio))].sort((a,b)=>b-a);
+    const sel   = document.getElementById(`sel-${key}`);
+    if (!sel) return;
+    sel.innerHTML = `<option value="">Todos los años</option>`;
+    years.forEach(y => { sel.innerHTML += `<option value="${y}">${y}</option>`; });
+  });
+  // Gastos
+  const gastosYears = [...new Set(allData.filter(d=>d.tipo==='Gastos').map(d=>d.anio))].sort((a,b)=>b-a);
+  const selG = document.getElementById('sel-gastos');
+  selG.innerHTML = `<option value="">Todos los años</option>`;
+  gastosYears.forEach(y => { selG.innerHTML += `<option value="${y}">${y}</option>`; });
+}
+
+// ══════════════════════════════════════════════
+//  ICONS
+// ══════════════════════════════════════════════
+const iconPDF   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>`;
+const iconPages = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>`;
+const iconChev  = `<svg class="gastos-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>`;
+const catClass  = { 'Gastos':'cat-gastos','Circular':'cat-circular','Legal':'cat-legal','Noticia':'cat-noticias' };
+const catLabel  = { 'Gastos':'Gastos comunes','Circular':'Circular','Legal':'Legal','Noticia':'Noticia' };
+
+// ══════════════════════════════════════════════
+//  RENDER DOCS (Circular / Legal)
+// ══════════════════════════════════════════════
+function renderDocs(tipo, gridId, emptyId, countId) {
+  const key   = tipo === 'Circular' ? 'circulares' : 'legal';
+  const q     = filters[key].toLowerCase();
+  const yr    = yearFilters[key];
+  const items = allData.filter(d =>
+    d.tipo === tipo &&
+    (!q  || d.titulo.toLowerCase().includes(q) || d.descripcion.toLowerCase().includes(q)) &&
+    (!yr || d.anio === yr)
+  );
+  const count = document.getElementById(countId);
+  count.textContent = `${items.length} documento${items.length !== 1 ? 's' : ''}`;
+  document.getElementById(gridId).innerHTML = items.map(d => {
+    const u1 = safeUrl(d.url);
+    const u2 = safeUrl(d.url2);
+    return `
+    <div class="doc-card">
+      <div class="card-top">
+        <span class="cat-pill ${catClass[d.tipo]}">${catLabel[d.tipo]}</span>
+        <span class="doc-date">${esc(d.fecha)}</span>
+      </div>
+      <h3 class="doc-title">${esc(d.titulo)}</h3>
+      <p class="doc-desc">${esc(d.descripcion)}</p>
+      <div class="card-footer">
+        <span class="doc-meta">${iconPages} ${esc(d.paginas||'—')} págs.</span>
+        ${u1
+          ? `<a href="${esc(u1)}" target="_blank" rel="noopener noreferrer" class="pdf-link">${iconPDF} Ver PDF</a>`
+          : `<span class="pdf-link disabled">${iconPDF} Sin archivo</span>`}
+        ${u2
+          ? `<a href="${esc(u2)}" target="_blank" rel="noopener noreferrer" class="pdf-link">${iconPDF} ${esc(d.label2 || 'Documento adicional')}</a>`
+          : ''}
+      </div>
+    </div>
+  `;}).join('');
+  document.getElementById(emptyId).style.display = items.length ? 'none' : 'block';
+}
+
+// ══════════════════════════════════════════════
+//  RENDER GASTOS — árbol año → mes
+// ══════════════════════════════════════════════
+function renderGastos() {
+  const items = allData.filter(d => d.tipo === 'Gastos' && (!gastosYear || d.anio === gastosYear));
+  const count = document.getElementById('count-gastos');
+  count.textContent = `${items.length} registro${items.length !== 1 ? 's' : ''}`;
+
+  if (!items.length) {
+    document.getElementById('grid-gastos').innerHTML = '';
+    document.getElementById('empty-gastos').style.display = 'block';
+    return;
+  }
+  document.getElementById('empty-gastos').style.display = 'none';
+
+  // Agrupar por año
+  const byYear = {};
+  items.forEach(d => {
+    if (!byYear[d.anio]) byYear[d.anio] = [];
+    byYear[d.anio].push(d);
+  });
+  const years = Object.keys(byYear).sort((a,b) => b - a);
+
+  document.getElementById('grid-gastos').innerHTML = years.map((yr, yi) => {
+    const meses = byYear[yr].sort((a,b) => MESES_ORDEN.indexOf(b.mes) - MESES_ORDEN.indexOf(a.mes));
+    const openClass = yi === 0 ? 'open' : '';
+    return `
+      <div class="gastos-year-block">
+        <div class="gastos-year-header ${openClass}" onclick="toggleYear(this)">
+          ${iconChev.replace('class="gastos-chevron"', `class="gastos-chevron ${openClass}"`)}
+          <span class="gastos-year-label">${esc(yr)}</span>
+          <span class="gastos-year-count">${meses.length} mes${meses.length!==1?'es':''}</span>
+        </div>
+        <div class="gastos-months ${openClass}">
+          ${meses.map(d => {
+            const u = safeUrl(d.url);
+            return `
+            <div class="gastos-month-row">
+              <div class="month-dot"></div>
+              <span class="month-name">${esc(d.mes)}</span>
+              <span class="month-desc">${esc(d.descripcion)}</span>
+              ${u
+                ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="month-link">${iconPDF} Abrir PDF</a>`
+                : `<span class="month-link disabled">${iconPDF} Sin archivo</span>`}
+            </div>
+          `;}).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleYear(header) {
+  const months = header.nextElementSibling;
+  const chev   = header.querySelector('.gastos-chevron');
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  months.classList.toggle('open', !isOpen);
+}
+
+// ══════════════════════════════════════════════
+//  RENDER NOTICIAS
+// ══════════════════════════════════════════════
+function renderNoticias() {
+  const items = allData.filter(d => d.tipo === 'Noticia');
+  const grid  = document.getElementById('grid-noticias');
+  const empty = document.getElementById('empty-noticias');
+  if (!items.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  // Clip metálico tipo bulldog/foldback
+  const clipSVG = `<svg viewBox="0 0 34 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- manijas de alambre -->
+    <path d="M12 26 L5 9 Q4 5 8 5 Q10 5 11 8 L14 24"
+          stroke="#909090" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M22 26 L29 9 Q30 5 26 5 Q24 5 23 8 L20 24"
+          stroke="#909090" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- triángulo superior (notch) -->
+    <path d="M13 23 L17 17 L21 23 Z" fill="#b8b8b8" stroke="#a0a0a0" stroke-width="0.6"/>
+    <!-- cuerpo principal del clip -->
+    <path d="M4 26 Q4 22 17 22 Q30 22 30 26 L28 48 Q28 52 17 52 Q6 52 6 48 Z"
+          fill="#c0c0c0" stroke="#aaa" stroke-width="0.5"/>
+    <!-- banda superior más oscura (zona de agarre) -->
+    <path d="M4 26 Q4 22 17 22 Q30 22 30 26 L29 34 L5 34 Z" fill="#a8a8a8"/>
+    <!-- reflejo/brillo diagonal -->
+    <path d="M7 27 Q7 24 17 24 Q27 24 27 27" stroke="rgba(255,255,255,0.55)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <!-- sombra interna inferior -->
+    <path d="M6 48 Q6 52 17 52 Q28 52 28 48 L28 44 Q28 50 17 50 Q6 50 6 44 Z" fill="rgba(0,0,0,0.08)"/>
+  </svg>`;
+
+  grid.innerHTML = items.map(d => {
+    const imgSrc = safeUrl(d.imagen);
+    const u = safeUrl(d.url);
+    return `
+    <div class="postit">
+      <div class="postit-clip">${clipSVG}</div>
+      <div class="postit-paper">
+        ${imgSrc ? `<img class="postit-img" src="${esc(imgSrc)}" alt="${esc(d.titulo)}">` : ''}
+        <span class="postit-author">${esc(d.autor || 'Administración')}</span>
+        <h3 class="postit-title">${esc(d.titulo)}</h3>
+        <p class="postit-text">${esc(d.descripcion)}</p>
+        ${u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="postit-attach">${iconPDF} Adjunto</a>` : ''}
+        <span class="postit-date">${esc(d.fecha)}</span>
+      </div>
+    </div>
+  `;}).join('');
+}
+
+// ── FORMULARIO ──
+function abrirFormulario() {
+  document.getElementById('form-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarFormulario() {
+  document.getElementById('form-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('form-body').style.display = 'block';
+  document.getElementById('form-success').style.display = 'none';
+  document.getElementById('aviso-form').reset();
+  document.getElementById('img-preview').style.display = 'none';
+}
+function cerrarSiOverlay(e) {
+  if (e.target === document.getElementById('form-overlay')) cerrarFormulario();
+}
+function previewImg(input) {
+  const preview = document.getElementById('img-preview');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+function enviarFormulario(e) {
+  e.preventDefault();
+  const form    = e.target;
+  const nombre  = form.querySelector('[name="nombre"]').value.trim();
+  const titulo  = form.querySelector('[name="titulo"]').value.trim();
+  const mensaje = form.querySelector('[name="mensaje"]').value.trim();
+
+  const subject = encodeURIComponent(`Aviso tablero: ${titulo}`);
+  const body    = encodeURIComponent(
+    `Nuevo aviso para el tablero de noticias\n` +
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+    `Residente: ${nombre}\n` +
+    `Título: ${titulo}\n\n` +
+    `Mensaje:\n${mensaje}\n` +
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+  );
+
+  window.location.href = `mailto:ed.dongerman@gmail.com?subject=${subject}&body=${body}`;
+
+  document.getElementById('form-body').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+}
+
+function renderAll() {
+  renderDocs('Circular','grid-circulares','empty-circulares','count-circulares');
+  renderDocs('Legal',   'grid-legal',     'empty-legal',    'count-legal');
+  renderGastos();
+  renderNoticias();
+}
+
+// ══════════════════════════════════════════════
+//  FILTROS
+// ══════════════════════════════════════════════
+function filterDocs(key,val)    { filters[key]=val;    renderAll(); }
+function filterByYear(key,val)  { yearFilters[key]=val; renderAll(); }
+function filterGastosYear(val)  { gastosYear=val;       renderGastos(); }
+
+loadData();
+</script>
+</body>
+</html>
