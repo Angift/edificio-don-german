@@ -10,7 +10,7 @@ on:
 jobs:
   encrypt:
     runs-on: ubuntu-latest
-     permissions:
+    permissions:
       contents: write
       actions: write
     steps:
