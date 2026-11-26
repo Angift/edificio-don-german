@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/index.html'
+      - 'index.html'
 
 jobs:
   encrypt:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Encrypt HTML
         run: |
-          staticrypt src/index.html \
+          staticrypt index.html \
             --password ${{ secrets.SITE_PASSWORD }} \
             --short \
             -d ./encrypted
